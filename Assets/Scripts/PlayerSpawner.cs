@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 public class PlayerSpawner : MonoBehaviour
@@ -11,8 +12,9 @@ public class PlayerSpawner : MonoBehaviour
 	}
 
 	[SerializeField] float spawnInterval;
-	[SerializeField] GameObject enemyType1;
-	[SerializeField] GameObject enemyType2;
+	[SerializeField] GameObject weaponType1;
+	[SerializeField] GameObject weaponType2;
+	[SerializeField] GameObject weaponType3;
 	float timeDiff = 0;
 
 	// Update is called once per frame
@@ -25,17 +27,15 @@ public class PlayerSpawner : MonoBehaviour
 		{
 			Vector3 pos = transform.position;
 
-			if (Random.Range(0, 2) > 1)
+			if (Random.Range(0, 3) > 1)
 			{
-				var enemy = Instantiate(enemyType1, pos, Quaternion.identity).GetComponent<EnemyObject>();
-				enemy.hitPoint = 100;
-				enemy.speed = 20;
+				var missile = Instantiate(weaponType1, pos, Quaternion.identity).GetComponent<ProjectileObject>();
+				missile.speed = new Vector3(1, 1);
 			}
 			else
 			{
-				var enemy = Instantiate(enemyType2, pos, Quaternion.identity).GetComponent<EnemyObject>();
-				enemy.hitPoint = 100;
-				enemy.speed = 20;
+				var missile = Instantiate(weaponType2, pos, Quaternion.identity).GetComponent<ProjectileObject>();
+				missile.speed = new Vector3(1, 1);
 			}
 
 			timeDiff = 0;

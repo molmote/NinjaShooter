@@ -5,16 +5,14 @@ using UnityEngine;
 public class EnemyObject : MonoBehaviour
 {
     public int hitPoint;
-	public int speed;
+	public Vector3 speed;
+	void Update()
+	{
+		transform.position += speed * Time.deltaTime;
+	}
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
+	// Start is called before the first frame update
+	void Start()
     {
         
     }

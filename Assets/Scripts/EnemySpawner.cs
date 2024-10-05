@@ -29,13 +29,13 @@ public class EnemySpawner : MonoBehaviour
             {
 				var enemy = Instantiate(enemyType1, pos, Quaternion.identity).GetComponent<EnemyObject>();
 				enemy.hitPoint = 100;
-				enemy.speed = 20;
+				enemy.speed = new Vector2(0,-1);
 			}
             else
             {
 				var enemy = Instantiate(enemyType2, pos, Quaternion.identity).GetComponent<EnemyObject>();
 				enemy.hitPoint = 100;
-				enemy.speed = 20;
+				enemy.speed = new Vector2(0, -1);
 			}
 			
             timeDiff = 0;

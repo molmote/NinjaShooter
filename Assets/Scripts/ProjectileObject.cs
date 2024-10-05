@@ -12,8 +12,13 @@ public enum WeaponType
 
 public class ProjectileObject : MonoBehaviour
 {
-	[SerializeField] WeaponType weaponType;
-	[SerializeField] ProjectileData data;
+	public WeaponType weaponType;
+	public ProjectileData data;
+	public Vector3 speed;
+	void Update()
+	{
+		transform.position += speed * Time.deltaTime;
+	}
 
 	private void OnCollisionEnter(Collision collision)
 	{
