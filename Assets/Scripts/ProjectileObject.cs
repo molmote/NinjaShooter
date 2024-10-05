@@ -10,13 +10,28 @@ public enum WeaponType
     Lightning
 }
 
-public class ProjectileObject
+public class ProjectileObject : MonoBehaviour
 {
-    public string name;
-    public string desc;
+	[SerializeField] WeaponType weaponType;
+	[SerializeField] ProjectileData data;
 
-    public float speed;
-    public float damage;
-    public int penetration;
-    // public int 
+	private void OnCollisionEnter(Collision collision)
+	{
+		Debug.Log("OnCollisionEnter " + collision.gameObject.name);
+	}
+
+	//private void OnCollisionStay(Collision collision)
+
+	//private void OnCollisionExit(Collision collision)
+}
+
+public class ProjectileData
+{
+	[SerializeField] WeaponType weaponType;
+	public string name;
+	public string desc;
+
+	public float speed;
+	public float damage;
+	public int penetration;
 }
