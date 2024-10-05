@@ -2,41 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum WeaponType
-{
-    Dagger,
-    IceSpear,
-    Fireball,
-    Lightning
-}
-
 public class ProjectileObject : MonoBehaviour
 {
-	public WeaponType weaponType;
+	// public ProjectileData.WeaponType weaponType;
 	public ProjectileData data;
 	public Vector3 speed;
+	public int life; //penetration 
+
 	void Update()
 	{
-		transform.position += speed * Time.deltaTime;
+		transform.Translate(speed * Time.deltaTime);
 	}
 
-	private void OnCollisionEnter(Collision collision)
+	void Start()
+	{
+		life = 1;
+	}
+
+	private void OnCollisionEnter2D(Collision2D collision)
 	{
 		Debug.Log("OnCollisionEnter " + collision.gameObject.name);
+		life--;
+
+		if (life <= 0 )
+		{
+			gameObject.SetActive(false);
+		}
 	}
 
 	//private void OnCollisionStay(Collision collision)
 
 	//private void OnCollisionExit(Collision collision)
-}
-
-public class ProjectileData
-{
-	[SerializeField] WeaponType weaponType;
-	public string name;
-	public string desc;
-
-	public float speed;
-	public float damage;
-	public int penetration;
 }

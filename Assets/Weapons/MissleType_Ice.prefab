@@ -99,8 +99,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ffbde8c24b66b344b3348d7575d1103, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponType: 1
+  data: {fileID: 11400000, guid: 98e3bcb2a2946aa4b9e735ec694e7a92, type: 2}
   speed: {x: 0, y: 0, z: 0}
+  life: 0
 --- !u!70 &905666847231708887
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
