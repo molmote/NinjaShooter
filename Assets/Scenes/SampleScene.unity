@@ -1658,7 +1658,7 @@ MonoBehaviour:
   coolDown3: 0
   gameOver: {fileID: 2131427488}
   timerShake: 0
-  intensity: 10
+  intensity: 1
   maxTime: 0.3
 --- !u!95 &8565131200175500660
 Animator:
