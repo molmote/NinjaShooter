@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-	public static EnemySpawner instance;
+	private static EnemySpawner instance;
 	public static EnemySpawner Instance
 	{
 		get
@@ -19,6 +19,7 @@ public class EnemySpawner : MonoBehaviour
     {
 		instance = this;
 
+		timeDiff = spawnInterval;
 		stageSpeed = stageSpeedInitial;
 	}
 

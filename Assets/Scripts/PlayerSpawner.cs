@@ -11,7 +11,7 @@ public class PlayerSpawner : MonoBehaviour
 		instance = this;
 	}
 
-	public static PlayerSpawner instance;
+	private static PlayerSpawner instance;
 	public static PlayerSpawner Instance
 	{
 		get
@@ -37,8 +37,8 @@ public class PlayerSpawner : MonoBehaviour
 	[SerializeField] GameObject weaponType3;
 	float timeDiff = 0;
 
-	List<EnemyObject> activeProjectileList;
-	List<EnemyObject> inactiveProjectileList;
+	List<ProjectileObject> activeProjectileList = new List<ProjectileObject>();
+	List<ProjectileObject> inactiveProjectileList = new List<ProjectileObject>();
 
 	// Update is called once per frame
 	void Update()
@@ -55,19 +55,34 @@ public class PlayerSpawner : MonoBehaviour
 			if (nearestEnemy != null)
 			{
 				var direction = nearestEnemy.transform.position - transform.position;
-				if (Random.Range(0, 3) > 1)
+				float angle = Vector2.Angle(nearestEnemy.transform.position, transform.position);
+				var weaponType = weaponType1;
+				int rand = Random.Range(0, 3);
+				if (rand >= 2)
 				{
-					var missile = Instantiate(weaponType1, pos, weaponType1.transform.rotation).GetComponent<ProjectileObject>();
-					missile.speed = direction.normalized;
+					weaponType = weaponType2;
 				}
-				else
+				else if (rand >= 1)
 				{
-					var missile = Instantiate(weaponType2, pos, weaponType1.transform.rotation).GetComponent<ProjectileObject>();
-					missile.speed = direction.normalized;
+					weaponType = weaponType3;
 				}
 
+				var missile = Instantiate(weaponType, pos, Quaternion.identity).GetComponent<ProjectileObject>();
+				missile.spriteRenderer.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+				missile.speed = direction.normalized;
+
 				timeDiff = 0;
+
+				activeProjectileList.Add(missile);
 			}
 		}
+	}
+
+	public void DestroyProjectile(ProjectileObject obj)
+	{
+		activeProjectileList.Remove(obj);
+		inactiveProjectileList.Add(obj);
+
+		obj.gameObject.SetActive(false);
 	}
 }

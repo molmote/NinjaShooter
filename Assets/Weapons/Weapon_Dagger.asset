@@ -16,5 +16,5 @@ MonoBehaviour:
   name: Dagger
   desc: Dagger
   speed: 2
-  damage: 15
+  damage: 45
   penetration: 1

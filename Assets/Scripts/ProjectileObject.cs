@@ -8,6 +8,7 @@ public class ProjectileObject : MonoBehaviour
 	public ProjectileData data;
 	public Vector3 speed;
 	public int life; //penetration 
+	public SpriteRenderer spriteRenderer;
 
 	void Update()
 	{
@@ -16,17 +17,21 @@ public class ProjectileObject : MonoBehaviour
 
 	void Start()
 	{
-		life = 1;
+		life = data.penetration;
 	}
 
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
 		Debug.Log("OnCollisionEnter " + collision.gameObject.name);
-		life--;
-
-		if (life <= 0 )
+		var enemy = collision.gameObject.GetComponent<EnemyObject>();
+		if (enemy != null)
 		{
-			gameObject.SetActive(false);
+			life--;
+
+			if (life <= 0)
+			{
+				PlayerSpawner.Instance.DestroyProjectile(this);
+			}
 		}
 	}
 

@@ -37,12 +37,10 @@ public class EnemyObject : MonoBehaviour
 			hitPoint -= (int)hit.data.damage;
 
 			// also show damage font here
-			if (hitPoint < 0)
+			if (hitPoint <= 0)
 			{
 				EnemySpawner.Instance.DestroyObject(this);
 			}
-
-			return;
 		}
 
 		/*var player = collision.gameObject.GetComponent<PlayerSpawner>();

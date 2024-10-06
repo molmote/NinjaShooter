@@ -16,5 +16,5 @@ MonoBehaviour:
   name: Ice Spear
   desc: Ice Spear
   speed: 1.5
-  damage: 15
+  damage: 50
   penetration: 2
