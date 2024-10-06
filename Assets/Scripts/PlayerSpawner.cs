@@ -30,6 +30,7 @@ public class PlayerSpawner : MonoBehaviour
 		}
 	}
 
+	[SerializeField] Animator anim;
 	[SerializeField] int hitPoint;
 	[SerializeField] float spawnInterval;
 	[SerializeField] GameObject weaponType1;
@@ -43,7 +44,6 @@ public class PlayerSpawner : MonoBehaviour
 	// Update is called once per frame
 	void Update()
     {
-
 		timeDiff += Time.deltaTime;
 
 		if (timeDiff > spawnInterval)
@@ -74,6 +74,8 @@ public class PlayerSpawner : MonoBehaviour
 				timeDiff = 0;
 
 				activeProjectileList.Add(missile);
+
+				anim.SetTrigger("Throw");
 			}
 		}
 	}
