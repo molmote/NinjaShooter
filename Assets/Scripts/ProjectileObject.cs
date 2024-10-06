@@ -11,7 +11,7 @@ public class ProjectileObject : MonoBehaviour
 
 	void Update()
 	{
-		transform.Translate(speed * Time.deltaTime);
+		transform.Translate(speed * Time.deltaTime * data.speed);
 	}
 
 	void Start()

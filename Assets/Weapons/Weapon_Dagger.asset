@@ -15,6 +15,6 @@ MonoBehaviour:
   weaponType: 0
   name: Dagger
   desc: Dagger
-  speed: 1
+  speed: 2
   damage: 15
   penetration: 1

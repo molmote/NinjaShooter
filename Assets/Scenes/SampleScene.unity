@@ -222,6 +222,8 @@ MonoBehaviour:
   spawnInterval: 5
   enemyType1: {fileID: 5602768485060790931, guid: 2c2fdb5013c12ed4c8a999831f3565b0, type: 3}
   enemyType2: {fileID: 4673464261516653066, guid: 3091628f835c332459910a6d9053f5a5, type: 3}
+  stageSpeedInitial: 0.5
+  stageSpeed: 0
 --- !u!4 &452923016 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6641948213796300070, guid: 2dde705f4b740f346bebc8aee9c68a82, type: 3}
@@ -687,6 +689,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f29e2b15c2acfa4a87f58d1aadd6293, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitPoint: 0
   spawnInterval: 1
   weaponType1: {fileID: 4767517772778103394, guid: 98b5ed89e0efc124dbe3a5380a764ced, type: 3}
   weaponType2: {fileID: 7387444243605261751, guid: 2dde705f4b740f346bebc8aee9c68a82, type: 3}
