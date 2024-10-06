@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerSpawner : MonoBehaviour
 {
@@ -9,6 +11,9 @@ public class PlayerSpawner : MonoBehaviour
     void Start()
     {
 		instance = this;
+		hitPoint = initialHitPoint;
+
+		UpdateDamageText();
 	}
 
 	private static PlayerSpawner instance;
@@ -20,6 +25,18 @@ public class PlayerSpawner : MonoBehaviour
 		}
 	}
 
+	public IEnumerator Restart()
+	{
+		yield return new WaitForSeconds(3f);
+
+		SceneManager.LoadScene("SampleScene");
+	}
+
+	public bool IsAlive()
+	{
+		return hitPoint > 0;
+	}
+
 	public void TakeDamage(int damage)
 	{
 		hitPoint -= damage;
@@ -29,16 +46,25 @@ public class PlayerSpawner : MonoBehaviour
 		if (hitPoint < 0)
 		{
 			gameOver.SetActive(true);
-			Time.timeScale = 0;
 			timerShake = 0;
+
+			StartCoroutine("Restart");
 		}
+
+		UpdateDamageText();
+	}
+
+	void UpdateDamageText()
+	{
+		playerHPText.text = $"{hitPoint}/{initialHitPoint}";
 	}
 
 	[SerializeField] Camera targetCamera;
 	[SerializeField] Color flipColor;
 	[SerializeField] float shake;
 	[SerializeField] Animator anim;
-	[SerializeField] int hitPoint;
+	int hitPoint;
+	[SerializeField] int initialHitPoint;
 	[SerializeField] float spawnInterval;
 	[SerializeField] GameObject weaponType1;
 	[SerializeField] GameObject weaponType2;
@@ -52,6 +78,7 @@ public class PlayerSpawner : MonoBehaviour
 	List<ProjectileObject> inactiveProjectileList = new List<ProjectileObject>();
 
 	[SerializeField] GameObject gameOver;
+	[SerializeField] TextMeshPro playerHPText;
 
 	[SerializeField] float timerShake;
 	[SerializeField] float intensity;
@@ -93,6 +120,11 @@ public class PlayerSpawner : MonoBehaviour
 		coolDown2 += Time.deltaTime;
 		coolDown3 += Time.deltaTime;
 
+		if (!IsAlive())
+		{
+			return;
+		}
+
 		if (Input.GetKey(KeyCode.A) && coolDown1 > 1)
 		{
 			FireWeapon(weaponType1);
@@ -107,6 +139,30 @@ public class PlayerSpawner : MonoBehaviour
 		{
 			FireWeapon(weaponType3);
 			coolDown3 = 0;
+		}
+
+		if (Input.touchCount > 0)
+		{
+			Touch touch = Input.GetTouch(0);
+
+			if (touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary)
+			{
+				if (coolDown1 > 1)
+				{
+					FireWeapon(weaponType1);
+					coolDown1 = 0;
+				}
+				else if (coolDown2 > 1)
+				{
+					FireWeapon(weaponType2);
+					coolDown2 = 0;
+				}
+				else if (coolDown3 > 1)
+				{
+					FireWeapon(weaponType3);
+					coolDown3 = 0;
+				}
+			}
 		}
 
 		if (timerShake > 0)

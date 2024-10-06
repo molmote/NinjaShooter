@@ -8,6 +8,11 @@ public class EnemyObject : MonoBehaviour
 	public Vector3 speed;
 	void Update()
 	{
+		if (!PlayerSpawner.Instance.IsAlive())
+		{
+			return;
+		}
+
 		if (hitPoint > 0)
 		{
 			transform.Translate(speed * Time.deltaTime);

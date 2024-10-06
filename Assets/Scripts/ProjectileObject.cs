@@ -12,6 +12,11 @@ public class ProjectileObject : MonoBehaviour
 
 	void Update()
 	{
+		if (!PlayerSpawner.Instance.IsAlive())
+		{
+			return;
+		}
+
 		transform.Translate(speed * Time.deltaTime * data.speed);
 	}
 

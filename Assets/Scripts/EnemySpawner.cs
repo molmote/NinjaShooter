@@ -89,7 +89,7 @@ public class EnemySpawner : MonoBehaviour
 
 			var spawnPosition = new Vector3(Random.Range(-1.5f, 1.5f), pos.y, pos.z);
 			var enemyType = enemyType1;
-			if (Random.Range(0,2) > 1)
+			if (Random.Range(0,2) >= 1)
             {
 				enemyType = enemyType2;
 			}
