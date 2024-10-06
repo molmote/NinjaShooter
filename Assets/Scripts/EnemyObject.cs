@@ -40,6 +40,7 @@ public class EnemyObject : MonoBehaviour
 			if (hitPoint <= 0)
 			{
 				EnemySpawner.Instance.DestroyObject(this);
+				EnemySpawner.Instance.CountKill();
 			}
 		}
 

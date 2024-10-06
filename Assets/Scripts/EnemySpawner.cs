@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -22,6 +24,7 @@ public class EnemySpawner : MonoBehaviour
 		timeDiff = spawnInterval;
 		stageSpeed = stageSpeedInitial;
 		stageHP = stageHPInitial;
+		killCountText.text = $" - {killForNextStage - killCount} Kill";
 	}
 
 	public void DestroyObject(EnemyObject obj)
@@ -32,6 +35,18 @@ public class EnemySpawner : MonoBehaviour
 		obj.gameObject.SetActive(false);
 	}
 
+	public void CountKill()
+	{
+		killCount++;
+		killCountText.text = $" - {killForNextStage - killCount} Kill";
+
+		if (killCount >= killForNextStage)
+		{
+			gameWin.SetActive(true);
+			Time.timeScale = 0;
+		}
+	}
+
 	public EnemyObject GetNearestEnemyObject()
 	{
 		if (activeEnemiesList != null && activeEnemiesList.Count > 0)
@@ -40,7 +55,13 @@ public class EnemySpawner : MonoBehaviour
 		return null;
 	}
 
-    [SerializeField] float spawnInterval;
+
+	[SerializeField] int killForNextStage;
+	[SerializeField] int killCount;
+	[SerializeField] TextMeshPro killCountText;
+	[SerializeField] GameObject gameWin;
+
+	[SerializeField] float spawnInterval;
 	[SerializeField] GameObject enemyType1;
 	[SerializeField] GameObject enemyType2;
 	List<EnemyObject> activeEnemiesList = new List<EnemyObject>();
@@ -66,7 +87,7 @@ public class EnemySpawner : MonoBehaviour
         {
 			Vector3 pos = transform.position;
 
-			var spawnPosition = new Vector3(Random.Range(-2,2), pos.y, pos.z);
+			var spawnPosition = new Vector3(Random.Range(-1.5f, 1.5f), pos.y, pos.z);
 			var enemyType = enemyType1;
 			if (Random.Range(0,2) > 1)
             {

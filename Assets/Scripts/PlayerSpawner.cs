@@ -28,7 +28,9 @@ public class PlayerSpawner : MonoBehaviour
 
 		if (hitPoint < 0)
 		{
-			// game ends
+			gameOver.SetActive(true);
+			Time.timeScale = 0;
+			timerShake = 0;
 		}
 	}
 
@@ -41,12 +43,17 @@ public class PlayerSpawner : MonoBehaviour
 	[SerializeField] GameObject weaponType1;
 	[SerializeField] GameObject weaponType2;
 	[SerializeField] GameObject weaponType3;
-	float timeDiff = 0;
+	[SerializeField] float coolDown1;
+	[SerializeField] float coolDown2;
+	[SerializeField] float coolDown3;
+	// float timeDiff = 0;
 
 	List<ProjectileObject> activeProjectileList = new List<ProjectileObject>();
 	List<ProjectileObject> inactiveProjectileList = new List<ProjectileObject>();
 
-	[SerializeField] float time;
+	[SerializeField] GameObject gameOver;
+
+	[SerializeField] float timerShake;
 	[SerializeField] float intensity;
 	[SerializeField] float maxTime;
 	Vector3 originalPosition;
@@ -55,50 +62,56 @@ public class PlayerSpawner : MonoBehaviour
 	public void Shake()
 	{
 		originalPosition = transform.position;
-		time = maxTime;
+		timerShake = maxTime;
+	}
+
+	void FireWeapon(GameObject weaponType)
+	{
+		Vector3 pos = transform.position;
+
+		var nearestEnemy = EnemySpawner.Instance.GetNearestEnemyObject();
+
+		if (nearestEnemy != null)
+		{
+			var direction = nearestEnemy.transform.position - transform.position;
+			float angle = Vector2.Angle(nearestEnemy.transform.position, transform.position);
+
+			var missile = Instantiate(weaponType, pos, Quaternion.identity).GetComponent<ProjectileObject>();
+			missile.spriteRenderer.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+			missile.speed = direction.normalized;
+
+			activeProjectileList.Add(missile);
+
+			anim.SetTrigger("Throw");
+		}
 	}
 
 	// Update is called once per frame
 	void Update()
     {
-		timeDiff += Time.deltaTime;
+		coolDown1 += Time.deltaTime;
+		coolDown2 += Time.deltaTime;
+		coolDown3 += Time.deltaTime;
 
-		if (timeDiff > spawnInterval)
+		if (Input.GetKey(KeyCode.A) && coolDown1 > 1)
 		{
-			Vector3 pos = transform.position;
-
-			var nearestEnemy = EnemySpawner.Instance.GetNearestEnemyObject();
-
-			if (nearestEnemy != null)
-			{
-				var direction = nearestEnemy.transform.position - transform.position;
-				float angle = Vector2.Angle(nearestEnemy.transform.position, transform.position);
-				var weaponType = weaponType1;
-				int rand = Random.Range(0, 3);
-				if (rand >= 2)
-				{
-					weaponType = weaponType2;
-				}
-				else if (rand >= 1)
-				{
-					weaponType = weaponType3;
-				}
-
-				var missile = Instantiate(weaponType, pos, Quaternion.identity).GetComponent<ProjectileObject>();
-				missile.spriteRenderer.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-				missile.speed = direction.normalized;
-
-				timeDiff = 0;
-
-				activeProjectileList.Add(missile);
-
-				anim.SetTrigger("Throw");
-			}
+			FireWeapon(weaponType1);
+			coolDown1 = 0;
+		}
+		if (Input.GetKey(KeyCode.S) && coolDown2 > 1)
+		{
+			FireWeapon(weaponType2);
+			coolDown2 = 0;
+		}
+		if (Input.GetKey(KeyCode.D) && coolDown3 > 1)
+		{
+			FireWeapon(weaponType3);
+			coolDown3 = 0;
 		}
 
-		if (time > 0)
+		if (timerShake > 0)
 		{
-			time -= Time.deltaTime;
+			timerShake -= Time.deltaTime;
 
 			transform.position =
 				new Vector3(
@@ -106,7 +119,7 @@ public class PlayerSpawner : MonoBehaviour
 					originalPosition.y + intensity,
 					originalPosition.z);
 
-			intensity = -(intensity * time / maxTime);
+			intensity = -(intensity * timerShake / maxTime);
 
 			FlipColor(intensity > 0);
 		}
@@ -126,13 +139,13 @@ public class PlayerSpawner : MonoBehaviour
 
 	public void FlipColor(bool flip)
 	{
-		if (flip)
+		/*if (flip)
 		{
 			targetCamera.backgroundColor = flipColor;
 		}
 		else
 		{
 			targetCamera.backgroundColor = new Color(69/255f,121 / 255f, 49 / 255f);
-		}
+		}*/
 	}
 }
