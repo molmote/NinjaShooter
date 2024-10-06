@@ -24,12 +24,17 @@ public class PlayerSpawner : MonoBehaviour
 	{
 		hitPoint -= damage;
 
+		Shake();
+
 		if (hitPoint < 0)
 		{
 			// game ends
 		}
 	}
 
+	[SerializeField] Camera targetCamera;
+	[SerializeField] Color flipColor;
+	[SerializeField] float shake;
 	[SerializeField] Animator anim;
 	[SerializeField] int hitPoint;
 	[SerializeField] float spawnInterval;
@@ -40,6 +45,18 @@ public class PlayerSpawner : MonoBehaviour
 
 	List<ProjectileObject> activeProjectileList = new List<ProjectileObject>();
 	List<ProjectileObject> inactiveProjectileList = new List<ProjectileObject>();
+
+	[SerializeField] float time;
+	[SerializeField] float intensity;
+	[SerializeField] float maxTime;
+	Vector3 originalPosition;
+	float timeShake;
+
+	public void Shake()
+	{
+		originalPosition = transform.position;
+		time = maxTime;
+	}
 
 	// Update is called once per frame
 	void Update()
@@ -78,6 +95,25 @@ public class PlayerSpawner : MonoBehaviour
 				anim.SetTrigger("Throw");
 			}
 		}
+
+		if (time > 0)
+		{
+			time -= Time.deltaTime;
+
+			transform.position =
+				new Vector3(
+					originalPosition.x + intensity,
+					originalPosition.y + intensity,
+					originalPosition.z);
+
+			intensity = -(intensity * time / maxTime);
+
+			FlipColor(intensity > 0);
+		}
+		else if (PlayerSpawner.Instance != null)
+		{
+			FlipColor(false);
+		}
 	}
 
 	public void DestroyProjectile(ProjectileObject obj)
@@ -86,5 +122,17 @@ public class PlayerSpawner : MonoBehaviour
 		inactiveProjectileList.Add(obj);
 
 		obj.gameObject.SetActive(false);
+	}
+
+	public void FlipColor(bool flip)
+	{
+		if (flip)
+		{
+			targetCamera.backgroundColor = flipColor;
+		}
+		else
+		{
+			targetCamera.backgroundColor = new Color(69/255f,121 / 255f, 49 / 255f);
+		}
 	}
 }

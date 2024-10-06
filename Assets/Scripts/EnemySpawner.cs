@@ -21,6 +21,7 @@ public class EnemySpawner : MonoBehaviour
 
 		timeDiff = spawnInterval;
 		stageSpeed = stageSpeedInitial;
+		stageHP = stageHPInitial;
 	}
 
 	public void DestroyObject(EnemyObject obj)
@@ -45,9 +46,16 @@ public class EnemySpawner : MonoBehaviour
 	List<EnemyObject> activeEnemiesList = new List<EnemyObject>();
 	List<EnemyObject> inactiveEnemiesList = new List<EnemyObject>();
 
+	public int enemyCount = 0;
+
 	float timeDiff = 0;
 	[SerializeField] float stageSpeedInitial = 0;
 	[SerializeField] float stageSpeed = 0;
+	[SerializeField] float stageSpeedStep = 0;
+
+	[SerializeField] float stageHPInitial = 0;
+	[SerializeField] float stageHP = 0;
+	[SerializeField] float stageHPStep = 0;
 
 	// Update is called once per frame
 	void Update()
@@ -65,13 +73,21 @@ public class EnemySpawner : MonoBehaviour
 				enemyType = enemyType2;
 			}
 
+			if (enemyCount >= 10)
+			{
+				stageSpeed += stageSpeedStep;
+				stageHP += stageHPStep;
+				enemyCount = 0;
+			}
+
 			var enemy = Instantiate(enemyType, spawnPosition, Quaternion.identity).GetComponent<EnemyObject>();
-			enemy.hitPoint = 100;
+			enemy.hitPoint = (int)stageHP;
 			enemy.speed = new Vector2(0, -stageSpeed);
 
 			activeEnemiesList.Add(enemy);
 
 			timeDiff = 0;
+			enemyCount++;
 		}
 	}
 }
